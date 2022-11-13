@@ -1,0 +1,11 @@
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "com.alibaba:druid-spring-boot-starter"
+    implementation("com.github.penggle:kaptcha") {
+        exclude group: "javax.servlet-api", module: "javax.servlet"
+    }
+    implementation "com.github.oshi:oshi-core"
+
+}

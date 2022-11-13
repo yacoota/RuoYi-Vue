@@ -1,0 +1,136 @@
+// 若依作为骨架进行升本地化级改造(2.5.14稳定版本，当前最高版本待验证)
+plugins {
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+}
+
+group 'com.ruoyi'
+version '3.8.4'
+
+subprojects {
+    apply plugin: 'java-library'
+
+    sourceCompatibility = targetJavaVersion
+    targetCompatibility = targetJavaVersion
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.compilerArgs += ['-Xdoclint:none', '-Xlint:none', '-nowarn']
+    }
+
+    tasks.withType(Copy){
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    ext {
+        druid_version = "1.2.11"
+        bitwalker_version = "1.21"
+        swagger_version = "3.0.0"
+        kaptcha_version = "2.3.2"
+        mybatis_spring_boot_version = "2.2.2"
+        pagehelper_boot_version = "1.4.5"
+        fastjson_version = "2.0.16"
+        oshi_version = "6.3.0"
+        commons_io_version = "2.11.0"
+        commons_pool_version = "2.11.1"
+        commons_fileupload_version = "1.4"
+        commons_collections_version = "3.2.2"
+        poi_version = "4.1.2"
+        velocity_version = "2.3"
+        jwt_version = "0.9.1"
+        tlog_version = "1.3.6"
+    }
+
+    configurations {
+        all*.exclude group: 'commons-logging'
+        all*.exclude group: 'org.apache.logging.log4j'
+
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+
+        implementation "com.yomahub:tlog-all-spring-boot-starter:${tlog_version}"
+        implementation "org.springframework.boot:spring-boot-starter"
+        implementation "org.springframework.boot:spring-boot-starter-security"
+        implementation "eu.bitwalker:UserAgentUtils:${bitwalker_version}"
+        implementation "com.alibaba:druid-spring-boot-starter:${druid_version}"
+        implementation "com.github.pagehelper:pagehelper-spring-boot-starter:${pagehelper_boot_version}"
+        implementation "com.github.oshi:oshi-core:${oshi_version}"
+        implementation "com.github.penggle:kaptcha:${kaptcha_version}"
+        implementation "commons-io:commons-io:${commons_io_version}"
+        implementation "org.apache.commons:commons-pool2:${commons_io_version}"
+        implementation "commons-fileupload:commons-fileupload:${commons_fileupload_version}"
+        implementation "commons-collections:commons-collections:${commons_collections_version}"
+        implementation "org.apache.poi:poi-ooxml:${poi_version}"
+        implementation "org.apache.velocity:velocity-engine-core:${velocity_version}"
+        implementation "com.alibaba.fastjson2:fastjson2:${fastjson_version}"
+        implementation "io.jsonwebtoken:jjwt:${jwt_version}"
+        implementation "com.github.penggle:kaptcha:${kaptcha_version}"
+        implementation("io.springfox:springfox-boot-starter:${swagger_version}") {
+            exclude group: "io.swagger", module: "swagger-annotations"
+            exclude group: "io.swagger", module: "swagger-models"
+        }
+        implementation "io.springfox:springfox-swagger-ui:${swagger_version}"
+        implementation "org.apache.commons:commons-lang3"
+        implementation "com.google.code.findbugs:jsr305:3.0.2"
+        implementation "javax.validation:validation-api:2.0.1.Final"
+        implementation 'org.slf4j:slf4j-api:1.7.36!!'
+
+        compileOnly "org.projectlombok:lombok:1.18.24"
+        annotationProcessor "org.projectlombok:lombok:1.18.24"
+    }
+}
+
+allprojects {
+    apply plugin: 'application'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public"}
+    }
+
+    defaultTasks 'clean', 'build', 'assemble'
+}
+
+project(':ruoyi-generator') {
+    dependencies {
+        api project(':ruoyi-common')
+    }
+}
+
+project(':ruoyi-framework') {
+    dependencies {
+        api project(':ruoyi-system')
+    }
+}
+
+project(':ruoyi-quartz') {
+    dependencies {
+        api project(':ruoyi-common')
+    }
+}
+
+project(':ruoyi-system') {
+    dependencies {
+        api project(':ruoyi-common')
+    }
+}
+
+project(':ruoyi-admin') {
+    dependencies {
+        api project(':ruoyi-framework')
+        api project(':ruoyi-quartz')
+        api project(':ruoyi-generator')
+    }
+}
+
+tasks.named("bootJar") {
+    enabled = false
+}

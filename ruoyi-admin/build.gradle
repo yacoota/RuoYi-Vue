@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "io.springfox:springfox-boot-starter"
+    implementation "io.springfox:springfox-swagger2"
+    implementation "io.swagger:swagger-annotations:1.6.8"
+    implementation "io.swagger:swagger-models:1.6.8"
+    implementation "io.springfox:springfox-swagger-ui"
+    implementation "mysql:mysql-connector-java"
+}
+
+archivesBaseName = 'ruoyi'
+
+tasks.named("bootJar") {
+    mainClass = 'com.ruoyi.RuoYiApplication'
+    manifest {
+        attributes("provider": "Gradle")
+        attributes("Implementation-Title": "Gradle")
+    }
+    enabled = true
+}

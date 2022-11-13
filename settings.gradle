@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/release' }
+        maven { url 'https://repo.spring.io/milestone' }
+        maven { url 'https://repo.spring.io/ui/native/libs-snapshot' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'RuoYi-Vue'
+include 'ruoyi-common'
+include 'ruoyi-generator'
+include 'ruoyi-framework'
+include 'ruoyi-quartz'
+include 'ruoyi-system'
+include 'ruoyi-admin'
